@@ -132,9 +132,11 @@ See `ARCHITECTURE.md` for technical details.
 
 ## Full sample run
 
+
 `$ python main.py -q "Compare and contrast agent handoff mechanisms in Google ADK, LangChain, and OpenAI agents" -cvri `
+
 🔍 Agentic Research Tool
-========================================
+
 ℹ️  🔄 Iterative Research-Critique Workflow (Hybrid)
 --------------------
 Using hybrid approach: programmatic research→critique, OpenAI critique→research
@@ -397,9 +399,9 @@ Overall, the report does a good job comparing the mechanisms side-by-side. Small
 
 Critique saved to results/critique_results.txt
 
-============================================================
+
 ℹ️  📊 Final Report Mode
-============================================================
+
 ℹ️  Starting final report generation from previous workflow steps
 
 📊 Generating comprehensive final report...
@@ -432,9 +434,9 @@ I'm working on the cost analysis and need to consider the final report's token u
 🎯 Total tokens: 159,440 (151,056 input, 8,384 output, 114,283 cached)
 Raw final_report events saved to results/raw_events_final_report.json
 
-============================================================
+
 FINAL REPORT:
-============================================================
+
 # Comparative Analysis of Agent Handoff Mechanisms in Google ADK, LangChain, and OpenAI Agents
 
 ## Executive Summary
