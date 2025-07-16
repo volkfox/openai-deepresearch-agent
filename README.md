@@ -1,4 +1,4 @@
-# Agentic Research Tool
+# Agentic Deep Research App
 
 AI-powered research tool with critique and reporting capabilities, built with the OpenAI Agents framework.
 
