@@ -172,6 +172,7 @@ Be thorough but concise in your assessment, highlighting both strengths and area
         final_report_instructions = """
 You are a professional report writer specializing in creating comprehensive, well-formatted markdown reports.
 Your role is to synthesize research findings and critique feedback into a polished final document.
+The goal is not to mention changes and critique points, but synthesize a high-quality new report with relevant links supporting the claims.
 
 You will receive:
 1. Original research content with findings and sources
@@ -180,26 +181,32 @@ You will receive:
 
 Your task is to create a unified, professional markdown report that:
 
-CONTENT REQUIREMENTS:
+MAIN CONTENT REQUIREMENTS:
 - Integrates the best research findings with critique insights
-- Addresses any factual errors or gaps identified in the critique
+- Addresses and fixes any factual errors or gaps identified in the critique
 - Maintains high-quality sourcing and citations
 - Provides balanced, evidence-based conclusions
-- Includes methodology transparency about sources and limitations
+
+
+SOURCE CITATION REQUIREMENTS:
+-  It is imperative that references are followed by source citations.
+-  Pay special attention not to separate references and their matching urls. 
 
 COST CALCULATION REQUIREMENTS:
-- MANDATORY: Find the current OpenAI pricing for all models in use from this URL: https://platform.openai.com/docs/pricing
-- DO NOT map model names, find exact pricing from this url for each exact model. Use web search tool for this.
-- Use code interpreter tool to calculate accurate costs for ALL models found in the token usage statistics (e.g., o4-mini-deep-research, o4-mini, etc.)
-- Account for different pricing tiers: input tokens, output tokens, cached input tokens (free), and reasoning tokens
+- MANDATORY: Find the current OpenAI pricing for all models in use using a fetch tool for website https://platform.openai.com/docs/pricing 
+- DO NOT map model names, do separate searches for all models in use, such as "o4-mini-deep-research pricing site:openai.com", or "o3-pro pricing site:openai.com", etc.
+- Note different pricing tiers: input tokens, output tokens, cached input tokens, and reasoning tokens (free because they are part of output)
+- Remember that cached tokens are part of the total input tokens. So do not double-count them.
+- MANDATORY: write code and call code_interpreter tool to calculate accurate total costs based on prices for ALL models found in the token usage statistics (o4-mini-deep-research, o4-mini, etc.)
 - Create a detailed cost breakdown table showing:
   * Each model used (o4-mini-deep-research, o4-mini, o3-pro, o3, etc.)
   * Token counts by type (input, output, cached, reasoning)
-  * Cost per token type for each model
-  * Total cost per model
-  * Grand total cost for entire workflow
+  * Cost per token type for each model from site:https://platform.openai.com/docs/pricing
+  * Total cost per model, rounded to cents (1/100th of a dollar)
+  * Grand total cost for entire workflow, rounded to cents (1/100th of a dollar)
+  * IMPORTANT: the table should include results of cost calculation program run in the code_interpreter tool. DO NOT assume or approximate total costs without running a program!
 - Present costs in a clear, professional format with tables showing cost breakdown by model and operation
-- Include total cost estimation for the entire workflow (research + critique + final report stages)
+- Include actual total cost estimation for the workflow of research + critique. Do not simulate estimates, you must write code to compute the costs.
 
 MARKDOWN FORMATTING REQUIREMENTS:
 - Use proper markdown headers (# ## ###)
@@ -227,8 +234,12 @@ STRUCTURE TEMPLATE:
 ### [Major Finding 2]
 [Details with evidence and sources]
 
+...
+
+### [Major Finding N]
+
 ## Critical Analysis
-[Integration of critique insights, addressing any gaps or concerns]
+[Addressing any remaining gaps or concerns, do not mention resolved issues]
 
 ## Conclusions and Recommendations
 [Evidence-based conclusions and actionable recommendations]
@@ -288,7 +299,7 @@ Provide a comprehensive critique analyzing factual accuracy, source quality, com
     @staticmethod
     def create_final_report_message(query: str, research_content: str, critique_content: str) -> str:
         """
-        Create a dynamic final report message with research and critique content.
+        Create a dynamic final report message integrating the research and critique content.
         
         Args:
             query: The original research query
@@ -298,7 +309,8 @@ Provide a comprehensive critique analyzing factual accuracy, source quality, com
         Returns:
             Formatted message for the final report agent
         """
-        return f"""Please create a comprehensive final markdown report that synthesizes the research findings and critique analysis.
+        return f"""Start creating a comprehensive final markdown report that synthesizes the research findings and critique analysis.
+        Include all sections and model cost lookups and calculations outlined in the system prompt.
 
 Original Research Query: '{query}'
 
@@ -308,13 +320,6 @@ RESEARCH CONTENT:
 CRITIQUE ANALYSIS:
 {critique_content}
 
-IMPORTANT: The critique analysis includes detailed token usage statistics at the end showing multiple models (e.g., o4-mini-deep-research, o4-mini) with their respective token counts. You MUST:
-
-1. Extract ALL model names and their token usage from the token usage statistics
-2. Use web search to get pricing from https://platform.openai.com/docs/pricing for each model
-3. Use code interpreter to calculate costs for ALL models found in the statistics
-4. Create a comprehensive cost breakdown table showing each model, token types, and costs
-
-Create a professional, well-formatted markdown report that integrates the research findings with the critique insights and accurate cost calculations for ALL models to provide maximum value to the reader."""
+"""
     
     
