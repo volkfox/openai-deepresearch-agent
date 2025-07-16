@@ -132,7 +132,7 @@ See `ARCHITECTURE.md` for technical details.
 
 ## Full sample run
 
-$ python main.py -q "Compare and contrast agent handoff mechanisms in Google ADK, LangChain, and OpenAI agents" -cvri 
+`$ python main.py -q "Compare and contrast agent handoff mechanisms in Google ADK, LangChain, and OpenAI agents" -cvri `
 🔍 Agentic Research Tool
 ========================================
 ℹ️  🔄 Iterative Research-Critique Workflow (Hybrid)
@@ -369,9 +369,9 @@ Raw research_critique_iterative events saved to results/raw_events_iterative.jso
 
 ✅ Iterative workflow completed
 
-============================================================
+
 FINAL OUTPUT:
-============================================================
+
 **Factual Accuracy:** The report’s descriptions of each framework’s handoff mechanism are generally on point, but there are a few minor inaccuracies or confusing bits.  For Google ADK, it correctly notes that one can emit a `transfer_to_agent` function call to let a child agent take over (this is confirmed by Google’s ADK blog, which explains that calling a sub-agent fully “transfers…responsibility” to that agent and leaves the root “out of the loop” ([cloud.google.com](https://cloud.google.com/blog/products/ai-machine-learning/build-multi-agentic-systems-using-google-adk#:~:text=This%20limitation%20stems%20from%20how,in%20these%20scenarios))).  It also correctly describes wrapping an agent as an `AgentTool`, which the root can call like a function. The Google Cloud example even shows `flight_tool = agent_tool.AgentTool(agent=flight_agent)` and a root LLM agent invoking it ([cloud.google.com](https://cloud.google.com/blog/products/ai-machine-learning/build-multi-agentic-systems-using-google-adk#:~:text=from%20google.adk.agents%20import%20agent_tool%20,can%20use%20these%20tools)).  However, the snippet in the report that reads ``FunctionCall(name='ImageGen',…)`` seems out of place (it likely should show calling the flight or booking agent’s tool instead).  Also, the report relies on a user’s GitHub (`Serafin-dev/google-adk`) for details; it would be stronger to cite Google’s own ADK docs or code for verification. 
 
 For LangChain (LangGraph), the summary is accurate.  The official LangGraph guide shows exactly the pattern described: an agent can `return Command(goto="OtherAgent", update={…})` to hand off control ([langchain-ai.lang.chat](https://langchain-ai.lang.chat/langgraph/how-tos/agent-handoffs/#:~:text=To%20implement%20handoffs%20in%20LangGraph%2C,control%20flow%20and%20state%20updates)).  The report correctly paraphrases this and the tool-based approach (`@tool def transfer_to_bob: return Command(goto="bob", …)`) shown in the docs ([langchain-ai.lang.chat](https://langchain-ai.lang.chat/langgraph/how-tos/agent-handoffs/#:~:text=%60%40tool%20def%20transfer_to_bob%28state%29%3A%20,w%2F%20respect%20to%20the%20parent)).  No factual errors stand out here; the key points match LangChain’s documentation. 
@@ -393,7 +393,7 @@ In the OpenAI section, the report could mention that the Python and JS SDKs beha
 Overall, the report does a good job comparing the mechanisms side-by-side. Small improvements would be to replace or supplement the unofficial ADK repo with Google’s own docs, correct or remove the `ImageGen` code snippet, and perhaps clarify some examples (e.g. specifying language or context). Adding a sentence or two on when one pattern might be preferred (e.g. ADK’s approach is tied to Google Cloud/Gemini, whereas LangGraph and OpenAI SDK are cloud-agnostic) could help completeness without straying from “handoff mechanisms.” 
 
 **Sources:** The key behaviors are confirmed by the cited documentation. For example, Google’s ADK blog clearly states the root agent’s control is handed off completely (hence losing context) ([cloud.google.com](https://cloud.google.com/blog/products/ai-machine-learning/build-multi-agentic-systems-using-google-adk#:~:text=This%20limitation%20stems%20from%20how,in%20these%20scenarios)). LangChain’s guides show the exact use of `Command(goto=…)` in examples ([langchain-ai.lang.chat](https://langchain-ai.lang.chat/langgraph/how-tos/agent-handoffs/#:~:text=To%20implement%20handoffs%20in%20LangGraph%2C,control%20flow%20and%20state%20updates)) ([langchain-ai.lang.chat](https://langchain-ai.lang.chat/langgraph/how-tos/agent-handoffs/#:~:text=%60%40tool%20def%20transfer_to_bob%28state%29%3A%20,w%2F%20respect%20to%20the%20parent)). The OpenAI SDK docs describe handoffs as tools and explain the full-history behavior ([openai.github.io](https://openai.github.io/openai-agents-python/handoffs/#:~:text=Handoffs%20are%20represented%20as%20tools,transfer_to_refund_agent)) ([openai.github.io](https://openai.github.io/openai-agents-python/handoffs/#:~:text=When%20a%20handoff%20occurs%2C%20it%27s,and%20must%20return%20a%20new)). In summary, the report’s main points align with these sources, though relying on unofficial GitHub pages for ADK is less reliable than official docs.
-============================================================
+
 
 Critique saved to results/critique_results.txt
 
